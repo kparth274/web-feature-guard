@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Download, Github } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -23,11 +24,13 @@ export const Hero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
-            <Download className="mr-2 h-5 w-5" />
-            Get Started
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          <Link to="/linter">
+            <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+              <Download className="mr-2 h-5 w-5" />
+              Try Live Demo
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
           <Button variant="outline" size="lg" className="border-border/50 hover:border-primary/50">
             <Github className="mr-2 h-5 w-5" />
             View on GitHub

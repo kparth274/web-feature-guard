@@ -4,6 +4,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 import { 
   Terminal, 
   Code, 
@@ -198,10 +199,12 @@ code --install-extension baseline-auto-linter`}
                 language="bash"
                 className="mb-4"
               />
-              <Button className="w-full bg-gradient-primary">
-                Install Extension
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              <Link to="/linter">
+                <Button className="w-full bg-gradient-primary">
+                  Try Live Demo
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
             </Card>
             
             <Card className="p-8 text-left">
