@@ -1,4 +1,7 @@
-import { features } from 'web-features';
+// Import JSON data directly to avoid Node.js dependencies
+import webFeaturesData from 'web-features/data.json';
+
+const features = webFeaturesData.features;
 
 // Feature mapping for detection
 const featureMapping = {
@@ -51,12 +54,12 @@ const getFeatureStatus = (featureId: string) => {
     message = `${featureName} - Limited availability. Consider using alternatives or polyfills`;
   }
 
-  // Extract browser support
+  // Extract browser support - safely handle missing properties
   const support = {
-    chrome: !!status?.support?.chrome,
-    firefox: !!status?.support?.firefox,
-    safari: !!status?.support?.safari,
-    edge: !!status?.support?.edge
+    chrome: !!(status?.support && 'chrome' in status.support && status.support.chrome),
+    firefox: !!(status?.support && 'firefox' in status.support && status.support.firefox),
+    safari: !!(status?.support && 'safari' in status.support && status.support.safari),
+    edge: !!(status?.support && 'edge' in status.support && status.support.edge)
   };
 
   return {
