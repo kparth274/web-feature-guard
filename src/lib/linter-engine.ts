@@ -1,75 +1,73 @@
-// Mock Baseline compatibility data
-const baselineData = {
+import { features } from 'web-features';
+
+// Feature mapping for detection
+const featureMapping = {
   // JavaScript APIs
-  "navigator.share": {
-    support: { chrome: true, firefox: false, safari: true, edge: true },
-    type: 'warning',
-    message: 'Web Share API - Partial support: Not available in Firefox desktop',
-    suggestion: 'Consider providing a fallback sharing method for Firefox users',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share'
-  },
-  "Array.flatMap": {
-    support: { chrome: true, firefox: true, safari: true, edge: true },
-    type: 'success',
-    message: 'Array.flatMap() - Widely supported in modern browsers',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap'
-  },
-  "fetch": {
-    support: { chrome: true, firefox: true, safari: true, edge: true },
-    type: 'success',
-    message: 'Fetch API - Widely supported across all major browsers',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API'
-  },
+  "navigator.share": "web-share",
+  "Array.flatMap": "array-flat",
+  "fetch": "fetch",
   
   // CSS Properties
-  "backdrop-filter": {
-    support: { chrome: true, firefox: false, safari: true, edge: true },
-    type: 'destructive',
-    message: 'backdrop-filter - Limited support: Not supported in Firefox, partial support in older browsers',
-    suggestion: 'Consider using a solid background color as fallback or check for support with @supports',
-    polyfill: 'https://github.com/Schepp/CSS-backdrop-filter-polyfill',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter'
-  },
-  "scroll-behavior": {
-    support: { chrome: true, firefox: true, safari: true, edge: true },
-    type: 'success',
-    message: 'scroll-behavior - Widely supported across all major browsers',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior'
-  },
-  "container-type": {
-    support: { chrome: true, firefox: false, safari: true, edge: true },
-    type: 'warning',
-    message: 'CSS Container Queries - Partial support: Not available in Firefox',
-    suggestion: 'Use @supports (container-type: inline-size) to provide fallbacks',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries'
-  },
-  "background-clip": {
-    support: { chrome: true, firefox: true, safari: true, edge: true },
-    type: 'success',
-    message: 'background-clip - Well supported, but use -webkit- prefix for text value',
-    suggestion: 'Use both background-clip: text and -webkit-background-clip: text for compatibility',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/background-clip'
-  },
+  "backdrop-filter": "backdrop-filter",
+  "scroll-behavior": "css-scroll-behavior",
+  "container-type": "container-queries",
+  "background-clip": "background-clip-text",
   
   // HTML Elements
-  "dialog": {
-    support: { chrome: true, firefox: true, safari: true, edge: true },
-    type: 'success',
-    message: 'HTML Dialog element - Good support in modern browsers',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog'
-  },
-  "input[type=color]": {
-    support: { chrome: true, firefox: true, safari: true, edge: true },
-    type: 'success',
-    message: 'Color input type - Well supported across modern browsers',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color'
-  },
-  "input[type=date]": {
-    support: { chrome: true, firefox: true, safari: true, edge: true },
-    type: 'success',
-    message: 'Date input type - Well supported across modern browsers',
-    mdn: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date'
+  "dialog": "dialog",
+  "input[type=color]": "input-color",
+  "input[type=date]": "input-date"
+};
+
+// Get Baseline status for a feature
+const getFeatureStatus = (featureId: string) => {
+  const feature = features[featureId as keyof typeof features];
+  
+  if (!feature) {
+    return null;
   }
+
+  // Type guard to check if feature has status property
+  if (!('status' in feature) || !feature.status) {
+    return null;
+  }
+
+  const status = feature.status;
+  const baseline = status.baseline;
+  const featureName = 'name' in feature ? feature.name : featureId;
+  
+  // Determine type based on baseline status
+  let type: 'success' | 'warning' | 'destructive' = 'success';
+  let message = '';
+  
+  if (baseline === 'high') {
+    type = 'success';
+    message = `${featureName} - Widely available across all major browsers`;
+  } else if (baseline === 'low') {
+    type = 'warning';
+    message = `${featureName} - Newly available. May need fallbacks for older browsers`;
+  } else {
+    type = 'destructive';
+    message = `${featureName} - Limited availability. Consider using alternatives or polyfills`;
+  }
+
+  // Extract browser support
+  const support = {
+    chrome: !!status?.support?.chrome,
+    firefox: !!status?.support?.firefox,
+    safari: !!status?.support?.safari,
+    edge: !!status?.support?.edge
+  };
+
+  return {
+    type,
+    message,
+    support,
+    name: featureName,
+    description: 'description' in feature ? feature.description : undefined,
+    spec: 'spec' in feature ? feature.spec : undefined,
+    baselineStatus: baseline
+  };
 };
 
 interface LinterResult {
@@ -116,75 +114,84 @@ const lintJavaScript = (lines: string[]): LinterResult[] => {
     
     // Check for navigator.share
     if (line.includes('navigator.share')) {
-      const data = baselineData["navigator.share"];
-      results.push({
-        feature: 'navigator.share',
-        line: lineNumber,
-        column: line.indexOf('navigator.share') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        suggestion: data.suggestion,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["navigator.share"]);
+      if (featureData) {
+        results.push({
+          feature: 'navigator.share',
+          line: lineNumber,
+          column: line.indexOf('navigator.share') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          suggestion: featureData.baselineStatus === false ? 'Consider providing a fallback for browsers without Web Share API support' : undefined,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share'
+        });
+      }
     }
     
     // Check for Array.flatMap
     if (line.includes('.flatMap')) {
-      const data = baselineData["Array.flatMap"];
-      results.push({
-        feature: 'Array.flatMap',
-        line: lineNumber,
-        column: line.indexOf('.flatMap') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["Array.flatMap"]);
+      if (featureData) {
+        results.push({
+          feature: 'Array.flatMap',
+          line: lineNumber,
+          column: line.indexOf('.flatMap') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap'
+        });
+      }
     }
     
     // Check for fetch
     if (line.includes('fetch(')) {
-      const data = baselineData["fetch"];
-      results.push({
-        feature: 'fetch',
-        line: lineNumber,
-        column: line.indexOf('fetch(') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["fetch"]);
+      if (featureData) {
+        results.push({
+          feature: 'fetch',
+          line: lineNumber,
+          column: line.indexOf('fetch(') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API'
+        });
+      }
     }
     
     // Check for backdrop-filter in CSS-in-JS
     if (line.includes('backdropFilter')) {
-      const data = baselineData["backdrop-filter"];
-      results.push({
-        feature: 'backdrop-filter',
-        line: lineNumber,
-        column: line.indexOf('backdropFilter') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        suggestion: data.suggestion,
-        polyfill: data.polyfill,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["backdrop-filter"]);
+      if (featureData) {
+        results.push({
+          feature: 'backdrop-filter',
+          line: lineNumber,
+          column: line.indexOf('backdropFilter') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          suggestion: featureData.baselineStatus === false ? 'Consider using a solid background color as fallback' : undefined,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter'
+        });
+      }
     }
     
     // Check for scroll-behavior in CSS-in-JS
     if (line.includes('scrollBehavior')) {
-      const data = baselineData["scroll-behavior"];
-      results.push({
-        feature: 'scroll-behavior',
-        line: lineNumber,
-        column: line.indexOf('scrollBehavior') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["scroll-behavior"]);
+      if (featureData) {
+        results.push({
+          feature: 'scroll-behavior',
+          line: lineNumber,
+          column: line.indexOf('scrollBehavior') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior'
+        });
+      }
     }
   });
   
@@ -199,62 +206,69 @@ const lintCSS = (lines: string[]): LinterResult[] => {
     
     // Check for backdrop-filter
     if (line.includes('backdrop-filter:')) {
-      const data = baselineData["backdrop-filter"];
-      results.push({
-        feature: 'backdrop-filter',
-        line: lineNumber,
-        column: line.indexOf('backdrop-filter:') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        suggestion: data.suggestion,
-        polyfill: data.polyfill,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["backdrop-filter"]);
+      if (featureData) {
+        results.push({
+          feature: 'backdrop-filter',
+          line: lineNumber,
+          column: line.indexOf('backdrop-filter:') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          suggestion: featureData.baselineStatus === false ? 'Use @supports (backdrop-filter: blur(10px)) for fallback' : undefined,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter'
+        });
+      }
     }
     
     // Check for scroll-behavior
     if (line.includes('scroll-behavior:')) {
-      const data = baselineData["scroll-behavior"];
-      results.push({
-        feature: 'scroll-behavior',
-        line: lineNumber,
-        column: line.indexOf('scroll-behavior:') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["scroll-behavior"]);
+      if (featureData) {
+        results.push({
+          feature: 'scroll-behavior',
+          line: lineNumber,
+          column: line.indexOf('scroll-behavior:') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior'
+        });
+      }
     }
     
     // Check for container-type
     if (line.includes('container-type:')) {
-      const data = baselineData["container-type"];
-      results.push({
-        feature: 'container-type',
-        line: lineNumber,
-        column: line.indexOf('container-type:') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        suggestion: data.suggestion,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["container-type"]);
+      if (featureData) {
+        results.push({
+          feature: 'container-type',
+          line: lineNumber,
+          column: line.indexOf('container-type:') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          suggestion: featureData.baselineStatus === false ? 'Use @supports (container-type: inline-size) for fallback' : undefined,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries'
+        });
+      }
     }
     
     // Check for background-clip: text
     if (line.includes('background-clip:') && line.includes('text')) {
-      const data = baselineData["background-clip"];
-      results.push({
-        feature: 'background-clip: text',
-        line: lineNumber,
-        column: line.indexOf('background-clip:') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        suggestion: data.suggestion,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["background-clip"]);
+      if (featureData) {
+        results.push({
+          feature: 'background-clip: text',
+          line: lineNumber,
+          column: line.indexOf('background-clip:') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          suggestion: 'Use both background-clip: text and -webkit-background-clip: text',
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/background-clip'
+        });
+      }
     }
   });
   
@@ -269,44 +283,50 @@ const lintHTML = (lines: string[]): LinterResult[] => {
     
     // Check for dialog element
     if (line.includes('<dialog')) {
-      const data = baselineData["dialog"];
-      results.push({
-        feature: 'dialog element',
-        line: lineNumber,
-        column: line.indexOf('<dialog') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["dialog"]);
+      if (featureData) {
+        results.push({
+          feature: 'dialog element',
+          line: lineNumber,
+          column: line.indexOf('<dialog') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog'
+        });
+      }
     }
     
     // Check for input type="color"
     if (line.includes('type="color"')) {
-      const data = baselineData["input[type=color]"];
-      results.push({
-        feature: 'input[type="color"]',
-        line: lineNumber,
-        column: line.indexOf('type="color"') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["input[type=color]"]);
+      if (featureData) {
+        results.push({
+          feature: 'input[type="color"]',
+          line: lineNumber,
+          column: line.indexOf('type="color"') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color'
+        });
+      }
     }
     
     // Check for input type="date"
     if (line.includes('type="date"')) {
-      const data = baselineData["input[type=date]"];
-      results.push({
-        feature: 'input[type="date"]',
-        line: lineNumber,
-        column: line.indexOf('type="date"') + 1,
-        type: data.type as any,
-        message: data.message,
-        support: data.support,
-        mdn: data.mdn
-      });
+      const featureData = getFeatureStatus(featureMapping["input[type=date]"]);
+      if (featureData) {
+        results.push({
+          feature: 'input[type="date"]',
+          line: lineNumber,
+          column: line.indexOf('type="date"') + 1,
+          type: featureData.type,
+          message: featureData.message,
+          support: featureData.support,
+          mdn: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date'
+        });
+      }
     }
   });
   

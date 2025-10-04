@@ -1,0 +1,86 @@
+{
+  "name": "baseline-auto-linter",
+  "displayName": "Baseline Auto-Linter",
+  "description": "Real-time web compatibility checker using Baseline data",
+  "version": "1.0.0",
+  "publisher": "baseline-linter",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "baseline",
+    "compatibility",
+    "web-features",
+    "css",
+    "javascript",
+    "html"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact",
+    "onLanguage:css",
+    "onLanguage:html"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Baseline Auto-Linter",
+      "properties": {
+        "baselineLinter.enableDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable real-time diagnostics for web compatibility issues"
+        },
+        "baselineLinter.severity": {
+          "type": "string",
+          "default": "warning",
+          "enum": ["error", "warning", "information"],
+          "description": "Severity level for compatibility issues"
+        },
+        "baselineLinter.showBaselineStatus": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show Baseline status on hover"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "baselineLinter.checkFile",
+        "title": "Check Web Compatibility",
+        "category": "Baseline"
+      },
+      {
+        "command": "baselineLinter.clearDiagnostics",
+        "title": "Clear Compatibility Diagnostics",
+        "category": "Baseline"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.80.0",
+    "@vscode/test-electron": "^2.3.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "web-features": "^2.0.0",
+    "compute-baseline": "^1.0.0"
+  }
+}

@@ -71,3 +71,85 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+---
+
+# Baseline Auto-Linter Project
+
+This project implements a **Baseline Auto-Linter & DevTool Plugin** that checks web code for browser compatibility using official [Baseline](https://web.dev/baseline) data.
+
+## 🚀 Features
+
+- **Web Application** - Interactive code editor with real-time compatibility checking
+- **VS Code Extension** - IDE integration for in-editor diagnostics and hover information
+- **Baseline Data** - Uses official web-features package from W3C WebDX Community Group
+- **Multi-language Support** - Works with JavaScript, TypeScript, CSS, and HTML
+- **Smart Suggestions** - Provides polyfill recommendations and fallback approaches
+
+## 📦 Components
+
+### 1. Web Application (Current Project)
+
+The web app provides an interactive interface for testing code compatibility:
+
+**Features:**
+- Live code editor with syntax highlighting
+- Real-time linting for JavaScript, CSS, and HTML
+- Browser support matrix visualization
+- Detailed compatibility reports
+
+**Access:** Click "Try Live Demo" from the homepage or navigate to `/linter`
+
+### 2. VS Code Extension
+
+Located in `vscode-extension/` directory.
+
+**Installation:**
+```bash
+cd vscode-extension
+npm install
+npm run compile
+npm run package
+code --install-extension baseline-auto-linter-1.0.0.vsix
+```
+
+**Features:**
+- Real-time diagnostics in Problems panel
+- Hover information with Baseline status
+- Multi-file support
+- Configurable severity levels
+
+See [vscode-extension/INSTALLATION.md](vscode-extension/INSTALLATION.md) for detailed setup.
+
+## 🔍 Detected Features
+
+### JavaScript APIs
+- `navigator.share()`, `fetch()`, `Array.flatMap()`, `structuredClone()`, `Object.hasOwn()`, and more
+
+### CSS Properties
+- `backdrop-filter`, `container-type`, `aspect-ratio`, `:has()`, `color-scheme`, and more
+
+### HTML Elements
+- `<dialog>`, `<input type="date">`, `<input type="color">`, `<details>`, and more
+
+## 📊 Baseline Status
+
+- ✅ **Widely Available** - Safe to use (Baseline High)
+- ⚠️ **Newly Available** - Use with caution (Baseline Low)
+- ❌ **Limited Availability** - Not widely supported (Not Baseline)
+
+## 🛠️ Tech Stack
+
+- **Core:** web-features + compute-baseline packages
+- **Web App:** React + TypeScript + Vite + Tailwind CSS
+- **VS Code:** Extension API + TypeScript
+
+## 📚 Resources
+
+- [Baseline Documentation](https://web.dev/baseline)
+- [web-features Package](https://www.npmjs.com/package/web-features)
+- [Web Platform Dashboard](https://webstatus.dev)
+
+---
+
+**Built for the web development community** ❤️
