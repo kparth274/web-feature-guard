@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lintCode } from "@/lib/linter-engine";
+import { findFeatureId } from "@/lib/feature-id-finder";
 import { ArrowLeft, Play, FileText, Code, Palette } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -80,6 +81,16 @@ const Linter = () => {
   const [code, setCode] = useState(defaultCode[activeTab]);
   const [results, setResults] = useState<any[]>([]);
   const [isLinting, setIsLinting] = useState(false);
+
+  useEffect(() => {
+    // Log available features for debugging (dev only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Testing feature detection:');
+      console.log('clipboard features:', findFeatureId('clipboard'));
+      console.log('at features:', findFeatureId('at'));
+      console.log('clone features:', findFeatureId('clone'));
+    }
+  }, []);
 
   useEffect(() => {
     setCode(defaultCode[activeTab]);

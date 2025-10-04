@@ -4,17 +4,25 @@ import webFeaturesData from 'web-features/data.json';
 const features = webFeaturesData.features;
 
 // Feature mapping for detection
-const featureMapping = {
-  // JavaScript APIs
+const featureMapping: Record<string, string> = {
+  // JavaScript APIs - using common patterns
   "navigator.share": "web-share",
+  "navigator.clipboard": "async-clipboard",
   "Array.flatMap": "array-flat",
+  "Array.at": "array-find-from-last", // or might be in array methods
   "fetch": "fetch",
+  "structuredClone": "structured-clone",
+  "Object.hasOwn": "object-hasown",
   
   // CSS Properties
   "backdrop-filter": "backdrop-filter",
   "scroll-behavior": "css-scroll-behavior",
   "container-type": "container-queries",
   "background-clip": "background-clip-text",
+  "aspect-ratio": "aspect-ratio",
+  "scroll-snap-type": "css-scroll-snap",
+  "scrollSnapType": "css-scroll-snap",
+  "aspectRatio": "aspect-ratio",
   
   // HTML Elements
   "dialog": "dialog",
@@ -22,12 +30,50 @@ const featureMapping = {
   "input[type=date]": "input-date"
 };
 
-// Get Baseline status for a feature
-const getFeatureStatus = (featureId: string) => {
-  const feature = features[featureId as keyof typeof features];
+// Alternative mappings to try if primary doesn't work
+const alternativeFeatureIds: Record<string, string[]> = {
+  "Array.at": ["array-at", "array-find-from-last", "at-array"],
+  "structuredClone": ["structured-clone", "structuredclone", "global-structured-clone"],
+  "navigator.clipboard": ["async-clipboard", "clipboard-api", "clipboard"],
+  "scrollSnapType": ["css-scroll-snap", "scroll-snap", "scroll-snap-type"],
+  "aspectRatio": ["aspect-ratio", "css-aspect-ratio"]
+};
+
+// Get Baseline status for a feature, trying alternative IDs if needed
+const getFeatureStatus = (featureId: string, featureKey?: string) => {
+  if (!featureId) return null;
+  
+  // Try primary feature ID
+  let feature = features[featureId as keyof typeof features];
+  
+  // If not found and we have alternatives, try those
+  if (!feature && featureKey && alternativeFeatureIds[featureKey]) {
+    for (const altId of alternativeFeatureIds[featureKey]) {
+      feature = features[altId as keyof typeof features];
+      if (feature) {
+        console.log(`Found alternative feature ID: ${altId} for ${featureKey}`);
+        break;
+      }
+    }
+  }
   
   if (!feature) {
-    return null;
+    // Feature not found in database, return a default "unknown" status
+    console.warn(`Feature "${featureId}" not found in web-features database`);
+    return {
+      type: 'warning' as const,
+      message: `Feature check not available - ${featureId} not in compatibility database yet`,
+      support: {
+        chrome: false,
+        firefox: false,
+        safari: false,
+        edge: false
+      },
+      name: featureKey || featureId,
+      description: 'This feature is not yet tracked in the Baseline database',
+      spec: undefined,
+      baselineStatus: false as const
+    };
   }
 
   // Type guard to check if feature has status property
@@ -115,85 +161,40 @@ const lintJavaScript = (lines: string[]): LinterResult[] => {
   lines.forEach((line, index) => {
     const lineNumber = index + 1;
     
-    // Check for navigator.share
-    if (line.includes('navigator.share')) {
-      const featureData = getFeatureStatus(featureMapping["navigator.share"]);
-      if (featureData) {
-        results.push({
-          feature: 'navigator.share',
-          line: lineNumber,
-          column: line.indexOf('navigator.share') + 1,
-          type: featureData.type,
-          message: featureData.message,
-          support: featureData.support,
-          suggestion: featureData.baselineStatus === false ? 'Consider providing a fallback for browsers without Web Share API support' : undefined,
-          mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share'
-        });
-      }
-    }
-    
-    // Check for Array.flatMap
-    if (line.includes('.flatMap')) {
-      const featureData = getFeatureStatus(featureMapping["Array.flatMap"]);
-      if (featureData) {
-        results.push({
-          feature: 'Array.flatMap',
-          line: lineNumber,
-          column: line.indexOf('.flatMap') + 1,
-          type: featureData.type,
-          message: featureData.message,
-          support: featureData.support,
-          mdn: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap'
-        });
-      }
-    }
-    
-    // Check for fetch
-    if (line.includes('fetch(')) {
-      const featureData = getFeatureStatus(featureMapping["fetch"]);
-      if (featureData) {
-        results.push({
-          feature: 'fetch',
-          line: lineNumber,
-          column: line.indexOf('fetch(') + 1,
-          type: featureData.type,
-          message: featureData.message,
-          support: featureData.support,
-          mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API'
-        });
-      }
-    }
-    
-    // Check for backdrop-filter in CSS-in-JS
-    if (line.includes('backdropFilter')) {
-      const featureData = getFeatureStatus(featureMapping["backdrop-filter"]);
-      if (featureData) {
-        results.push({
-          feature: 'backdrop-filter',
-          line: lineNumber,
-          column: line.indexOf('backdropFilter') + 1,
-          type: featureData.type,
-          message: featureData.message,
-          support: featureData.support,
-          suggestion: featureData.baselineStatus === false ? 'Consider using a solid background color as fallback' : undefined,
-          mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter'
-        });
-      }
-    }
-    
-    // Check for scroll-behavior in CSS-in-JS
-    if (line.includes('scrollBehavior')) {
-      const featureData = getFeatureStatus(featureMapping["scroll-behavior"]);
-      if (featureData) {
-        results.push({
-          feature: 'scroll-behavior',
-          line: lineNumber,
-          column: line.indexOf('scrollBehavior') + 1,
-          type: featureData.type,
-          message: featureData.message,
-          support: featureData.support,
-          mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior'
-        });
+    // Define checks for various JavaScript features
+    const checks = [
+      { pattern: 'navigator.share', key: 'navigator.share', mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share' },
+      { pattern: 'navigator.clipboard', key: 'navigator.clipboard', mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Clipboard' },
+      { pattern: '.flatMap', key: 'Array.flatMap', mdn: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap' },
+      { pattern: '.at(', key: 'Array.at', mdn: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at' },
+      { pattern: 'fetch(', key: 'fetch', mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API' },
+      { pattern: 'structuredClone', key: 'structuredClone', mdn: 'https://developer.mozilla.org/en-US/docs/Web/API/structuredClone' },
+      { pattern: 'Object.hasOwn', key: 'Object.hasOwn', mdn: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn' },
+      { pattern: 'backdropFilter', key: 'backdrop-filter', mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter' },
+      { pattern: 'scrollBehavior', key: 'scroll-behavior', mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior' },
+      { pattern: 'scrollSnapType', key: 'scrollSnapType', mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-type' },
+      { pattern: 'aspectRatio', key: 'aspectRatio', mdn: 'https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio' }
+    ];
+
+    for (const check of checks) {
+      if (line.includes(check.pattern)) {
+        const featureId = featureMapping[check.key];
+        if (featureId) {
+          const featureData = getFeatureStatus(featureId, check.key);
+          
+          if (featureData) {
+            results.push({
+              feature: check.key,
+              line: lineNumber,
+              column: line.indexOf(check.pattern) + 1,
+              type: featureData.type,
+              message: featureData.message,
+              support: featureData.support,
+              suggestion: featureData.baselineStatus === false ? `Consider providing a polyfill or fallback for ${featureData.name}` : undefined,
+              mdn: check.mdn
+            });
+          }
+        }
       }
     }
   });
