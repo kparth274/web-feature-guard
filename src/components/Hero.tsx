@@ -31,10 +31,12 @@ export const Hero = () => {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
+          <Link to="https://github.com/kparth274/web-feature-guard">
           <Button variant="outline" size="lg" className="border-border/50 hover:border-primary/50">
             <Github className="mr-2 h-5 w-5" />
             View on GitHub
           </Button>
+          </Link>
         </div>
         
         <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">

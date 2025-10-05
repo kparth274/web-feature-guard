@@ -219,27 +219,24 @@ code --install-extension baseline-auto-linter`}
                 language="bash"
                 className="mb-4"
               />
+              <Link to="https://github.com/kparth274/web-feature-guard/releases/tag/v0.0.1">
                <Button className="w-full bg-gradient-primary">
                   Try the VSCode Extension
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
+                </Link>
             </Card>
           </div>
           
           <div className="text-center">
             <p className="text-muted-foreground mb-6">
-              Questions? Check out our comprehensive documentation or join our community.
+              Questions? Visit our Github page for any further queries.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="outline">
-                📚 Documentation
-              </Button>
-              <Button variant="outline">
-                💬 Community Discord
-              </Button>
-              <Button variant="outline">
-                🐛 Report Issue
-              </Button>
+              <Link to="https://github.com/kparth274/web-feature-guard"><Button variant="outline">
+                Github
+              </Button></Link>
+              
             </div>
           </div>
         </div>
