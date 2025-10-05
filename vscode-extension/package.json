@@ -80,7 +80,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "web-features": "^2.0.0",
-    "compute-baseline": "^1.0.0"
+    "web-features": "^3.3.0",
+    "compute-baseline": "^0.4.0"
   }
 }
