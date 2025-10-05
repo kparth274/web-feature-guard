@@ -135,31 +135,42 @@ function provideBaselineHover(
     return undefined;
   }
 
-  const status = feature.status;
-  const baseline = status?.baseline;
-
   let statusBadge = '';
   let statusText = '';
-  
-  if (baseline === 'high') {
-    statusBadge = '✅';
-    statusText = '**Widely Available** - Safe to use across all major browsers';
-  } else if (baseline === 'low') {
-    statusBadge = '⚠️';
-    statusText = '**Newly Available** - Available in latest browsers, consider fallbacks for older versions';
+  let baseline: string | undefined;
+  let status: any;
+
+  // ✅ Type guard fix — only FeatureData has 'status'
+  if ('status' in feature && feature.status) {
+    status = feature.status;
+    baseline = status.baseline;
+
+    if (baseline === 'high') {
+      statusBadge = '✅';
+      statusText = '**Widely Available** - Safe to use across all major browsers';
+    } else if (baseline === 'low') {
+      statusBadge = '⚠️';
+      statusText = '**Newly Available** - Available in latest browsers, consider fallbacks for older versions';
+    } else {
+      statusBadge = '❌';
+      statusText = '**Limited Availability** - Not widely supported, use with caution';
+    }
   } else {
-    statusBadge = '❌';
-    statusText = '**Limited Availability** - Not widely supported, use with caution';
+    statusBadge = '❓';
+    statusText = '**Status Unknown** - Feature information unavailable';
   }
 
   const markdown = new vscode.MarkdownString();
   markdown.isTrusted = true;
   markdown.supportHtml = true;
 
-  markdown.appendMarkdown(`${statusBadge} **${feature.name}**\n\n`);
+  // ✅ Safe name access for all feature types
+  const featureName = 'name' in feature && feature.name ? feature.name : featureId;
+  markdown.appendMarkdown(`${statusBadge} **${featureName}**\n\n`);
+
   markdown.appendMarkdown(`${statusText}\n\n`);
-  
-  if (feature.description) {
+
+  if ('description' in feature && feature.description) {
     markdown.appendMarkdown(`${feature.description}\n\n`);
   }
 
@@ -171,12 +182,13 @@ function provideBaselineHover(
     markdown.appendMarkdown(`- Edge: ${status.support.edge || 'Not supported'}\n\n`);
   }
 
-  if (feature.spec) {
+  if ('spec' in feature && feature.spec) {
     markdown.appendMarkdown(`[View Specification](${feature.spec})\n`);
   }
 
   return new vscode.Hover(markdown, range);
 }
+
 
 export function deactivate() {
   if (diagnosticCollection) {

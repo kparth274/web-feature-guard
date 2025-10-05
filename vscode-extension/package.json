@@ -4,7 +4,14 @@
   "description": "Real-time web compatibility checker using Baseline data",
   "version": "1.0.0",
   "publisher": "baseline-linter",
-  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parthlovable/web-feature-guard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/parthlovable/web-feature-guard/issues"
+  },
+  "homepage": "https://github.com/parthlovable/web-feature-guard#readme",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -80,7 +87,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "web-features": "^2.0.0",
-    "compute-baseline": "^1.0.0"
+    "web-features": "^3.3.0",
+    "compute-baseline": "^0.4.0"
   }
 }
