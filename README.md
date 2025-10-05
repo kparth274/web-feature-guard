@@ -1,155 +1,102 @@
-# Welcome to your Lovable project
+Baseline Auto-Linter
 
-## Project info
+A web compatibility analyzer and developer tool that checks your web code against official Baseline
+ data to ensure browser support and modern standards compliance.
 
-**URL**: https://lovable.dev/projects/5d8bc074-f0e5-42bc-960d-fb36bc71ef1a
+🚀 Overview
 
-## How can I edit this code?
+Baseline Auto-Linter helps developers quickly identify compatibility issues across JavaScript, CSS, and HTML using the latest browser Baseline data.
+It includes both a web application and a VS Code extension for real-time linting and diagnostics.
 
-There are several ways of editing your application.
+🧩 Key Features
 
-**Use Lovable**
+Real-Time Compatibility Checking – Instantly see which features are safe to use across major browsers.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5d8bc074-f0e5-42bc-960d-fb36bc71ef1a) and start prompting.
+VS Code Integration – View compatibility warnings directly inside your IDE.
 
-Changes made via Lovable will be committed automatically to this repo.
+Multi-language Support – Analyze JavaScript, TypeScript, CSS, and HTML files.
 
-**Use your preferred IDE**
+Baseline Data Integration – Uses official web-features and compute-baseline packages from the W3C WebDX Community Group.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Smart Suggestions – Get polyfill recommendations and fallback guidance.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+🛠️ Tech Stack
 
-Follow these steps:
+Frontend: React, TypeScript, Vite, Tailwind CSS, shadcn-ui
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Extension: VS Code API, TypeScript
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Data Source: W3C WebDX Baseline (web-features)
 
-# Step 3: Install the necessary dependencies.
-npm i
+🧠 Project Structure
+1. Web Application
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Interactive web interface for testing code compatibility.
+
+Features:
+
+Live code editor with syntax highlighting
+
+Real-time linting for JS/CSS/HTML
+
+Browser support visualization
+
+Compatibility reports
+
+Run it locally:
+
+git clone <REPO_URL>
+cd <PROJECT_NAME>
+npm install
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+2. VS Code Extension
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Found in the vscode-extension/ directory.
 
-**Use GitHub Codespaces**
+Install and Run:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/5d8bc074-f0e5-42bc-960d-fb36bc71ef1a) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
-
----
-
-# Baseline Auto-Linter Project
-
-This project implements a **Baseline Auto-Linter & DevTool Plugin** that checks web code for browser compatibility using official [Baseline](https://web.dev/baseline) data.
-
-## 🚀 Features
-
-- **Web Application** - Interactive code editor with real-time compatibility checking
-- **VS Code Extension** - IDE integration for in-editor diagnostics and hover information
-- **Baseline Data** - Uses official web-features package from W3C WebDX Community Group
-- **Multi-language Support** - Works with JavaScript, TypeScript, CSS, and HTML
-- **Smart Suggestions** - Provides polyfill recommendations and fallback approaches
-
-## 📦 Components
-
-### 1. Web Application (Current Project)
-
-The web app provides an interactive interface for testing code compatibility:
-
-**Features:**
-- Live code editor with syntax highlighting
-- Real-time linting for JavaScript, CSS, and HTML
-- Browser support matrix visualization
-- Detailed compatibility reports
-
-**Access:** Click "Try Live Demo" from the homepage or navigate to `/linter`
-
-### 2. VS Code Extension
-
-Located in `vscode-extension/` directory.
-
-**Installation:**
-```bash
 cd vscode-extension
 npm install
 npm run compile
 npm run package
 code --install-extension baseline-auto-linter-1.0.0.vsix
-```
 
-**Features:**
-- Real-time diagnostics in Problems panel
-- Hover information with Baseline status
-- Multi-file support
-- Configurable severity levels
 
-See [vscode-extension/INSTALLATION.md](vscode-extension/INSTALLATION.md) for detailed setup.
+Features:
 
-## 🔍 Detected Features
+Inline diagnostics and hover info
 
-### JavaScript APIs
-- `navigator.share()`, `fetch()`, `Array.flatMap()`, `structuredClone()`, `Object.hasOwn()`, and more
+Multi-file support
 
-### CSS Properties
-- `backdrop-filter`, `container-type`, `aspect-ratio`, `:has()`, `color-scheme`, and more
+Configurable severity levels
 
-### HTML Elements
-- `<dialog>`, `<input type="date">`, `<input type="color">`, `<details>`, and more
+See vscode-extension/INSTALLATION.md for details.
 
-## 📊 Baseline Status
+🧩 Detected Features
+JavaScript APIs
 
-- ✅ **Widely Available** - Safe to use (Baseline High)
-- ⚠️ **Newly Available** - Use with caution (Baseline Low)
-- ❌ **Limited Availability** - Not widely supported (Not Baseline)
+navigator.share(), fetch(), Array.flatMap(), structuredClone(), Object.hasOwn(), etc.
 
-## 🛠️ Tech Stack
+CSS Properties
 
-- **Core:** web-features + compute-baseline packages
-- **Web App:** React + TypeScript + Vite + Tailwind CSS
-- **VS Code:** Extension API + TypeScript
+backdrop-filter, aspect-ratio, :has(), color-scheme, etc.
 
-## 📚 Resources
+HTML Elements
 
-- [Baseline Documentation](https://web.dev/baseline)
-- [web-features Package](https://www.npmjs.com/package/web-features)
-- [Web Platform Dashboard](https://webstatus.dev)
+<dialog>, <details>, <input type="date">, <input type="color">, etc.
 
----
+📊 Compatibility Levels
+Symbol	Meaning
+✅	Widely Available – Safe to use (Baseline High)
+⚠️	Newly Available – Use with caution (Baseline Low)
+❌	Limited Support – Not yet Baseline
+📚 Resources
 
-**Built for the web development community** ❤️
+Baseline Documentation
+
+web-features Package
+
+Web Platform Dashboard
+
+Maintained for the web development community. 🛠️
