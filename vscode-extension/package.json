@@ -15,6 +15,7 @@
   "engines": {
     "vscode": "^1.80.0"
   },
+  "icon": "icon.png",
   "categories": [
     "Linters",
     "Programming Languages"

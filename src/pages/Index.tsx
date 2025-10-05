@@ -145,8 +145,8 @@ const Index = () => {
             
             <FeatureCard
               icon={<Terminal className="h-6 w-6" />}
-              title="CLI Mode"
-              description="Integrate into your CI/CD pipeline to catch compatibility issues before they reach production."
+              title="Immediate Flagging"
+              description="Baseline Auto Linter immediately flags unsupported/partially supported code snippets."
             />
             
             <FeatureCard
@@ -190,12 +190,12 @@ const Index = () => {
             <Card className="p-8 text-left">
               <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <Code className="h-5 w-5 text-primary" />
-                VS Code Extension
+                Web Demo
               </h3>
               <CodeBlock
-                code={`# Search for "Baseline Auto-Linter" in VS Code
-# Or install via command line:
-code --install-extension baseline-auto-linter`}
+                code={`# Open the Baseline Auto-Linter web demo to explore real-time compatibility checks.  
+# Try the provided sample code in the editor or paste in your own HTML, CSS, or JavaScript.  
+# See instantly which features are supported across browsers.`}
                 language="bash"
                 className="mb-4"
               />
@@ -210,21 +210,19 @@ code --install-extension baseline-auto-linter`}
             <Card className="p-8 text-left">
               <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <Terminal className="h-5 w-5 text-primary" />
-                CLI Tool
+                VSCode Extension
               </h3>
               <CodeBlock
-                code={`# Install globally via npm
-npm install -g baseline-auto-linter
-
-# Run on your project
-baseline-lint ./src`}
+                code={`# Search for "Baseline Auto-Linter" in VS Code.  
+# Or install via command line:  
+code --install-extension baseline-auto-linter`}
                 language="bash"
                 className="mb-4"
               />
-              <Button variant="outline" className="w-full border-primary/20 hover:border-primary/50">
-                View CLI Docs
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+               <Button className="w-full bg-gradient-primary">
+                  Try the VSCode Extension
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
             </Card>
           </div>
           

@@ -44,7 +44,7 @@ export const Hero = () => {
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-primary"></div>
-            CLI Integration
+            Web Code Editor
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-warning"></div>
