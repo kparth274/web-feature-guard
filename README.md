@@ -30,7 +30,7 @@ It includes:
 | Component              | Technology                                       |
 | ---------------------- | ------------------------------------------------ |
 | **Frontend (Web App)** | React, TypeScript, Vite, Tailwind CSS, shadcn/ui |
-| **Extension**          | VS Code API, TypeScript                          |
+| **Extension**          | VSCE (Visual Studio Code Extension Manager), TypeScript                          |
 | **Data Source**        | W3C WebDX Baseline (`web-features`)              |
 
 ---
