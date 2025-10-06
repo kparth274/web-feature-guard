@@ -59,16 +59,17 @@ const Index = () => {
       <Hero />
       
       {/* Demo Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 px-6 relative">
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"></div>
+        <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4">
+            <Badge variant="secondary" className="mb-4 animate-scale-in">
               Live Demo
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-fade-in">
               See It In Action
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-in-up">
               Watch how the linter identifies compatibility issues in real-time and provides actionable feedback.
             </p>
           </div>
@@ -84,36 +85,36 @@ const Index = () => {
             </div>
             
             <div className="space-y-4">
-              <Card className="p-6 border-success/20 bg-success/5">
+              <Card className="p-6 border-success/20 bg-success/5 hover:border-success/40 hover:bg-success/10 transition-all duration-300 hover:scale-[1.02] group cursor-default">
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-success mt-0.5" />
+                  <CheckCircle className="h-5 w-5 text-success mt-0.5 group-hover:scale-110 transition-transform" />
                   <div>
-                    <h3 className="font-semibold text-success mb-2">Safe to Use</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="font-semibold text-success mb-2 group-hover:text-success/90">Safe to Use</h3>
+                    <p className="text-sm text-muted-foreground group-hover:text-foreground/70 transition-colors">
                       Features with universal browser support across all major browsers.
                     </p>
                   </div>
                 </div>
               </Card>
               
-              <Card className="p-6 border-warning/20 bg-warning/5">
+              <Card className="p-6 border-warning/20 bg-warning/5 hover:border-warning/40 hover:bg-warning/10 transition-all duration-300 hover:scale-[1.02] group cursor-default">
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 text-warning mt-0.5" />
+                  <AlertTriangle className="h-5 w-5 text-warning mt-0.5 group-hover:scale-110 transition-transform" />
                   <div>
-                    <h3 className="font-semibold text-warning mb-2">Partial Support</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="font-semibold text-warning mb-2 group-hover:text-warning/90">Partial Support</h3>
+                    <p className="text-sm text-muted-foreground group-hover:text-foreground/70 transition-colors">
                       Features missing in some browsers with specific recommendations.
                     </p>
                   </div>
                 </div>
               </Card>
               
-              <Card className="p-6 border-destructive/20 bg-destructive/5">
+              <Card className="p-6 border-destructive/20 bg-destructive/5 hover:border-destructive/40 hover:bg-destructive/10 transition-all duration-300 hover:scale-[1.02] group cursor-default">
                 <div className="flex items-start gap-3">
-                  <XCircle className="h-5 w-5 text-destructive mt-0.5" />
+                  <XCircle className="h-5 w-5 text-destructive mt-0.5 group-hover:scale-110 transition-transform" />
                   <div>
-                    <h3 className="font-semibold text-destructive mb-2">Not Supported</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="font-semibold text-destructive mb-2 group-hover:text-destructive/90">Not Supported</h3>
+                    <p className="text-sm text-muted-foreground group-hover:text-foreground/70 transition-colors">
                       Features requiring polyfills or alternative implementations.
                     </p>
                   </div>
@@ -125,13 +126,14 @@ const Index = () => {
       </section>
       
       {/* Features Section */}
-      <section className="py-20 px-6 bg-card/20">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 px-6 bg-card/20 relative overflow-hidden">
+        <div className="absolute top-1/2 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px]"></div>
+        <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-fade-in">
               Why Choose Baseline Auto-Linter?
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto animate-fade-in-up">
               Streamline your development workflow with intelligent compatibility checking and automated fix suggestions.
             </p>
           </div>
@@ -177,19 +179,20 @@ const Index = () => {
       </section>
       
       {/* Installation Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+      <section className="py-20 px-6 relative">
+        <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/10 rounded-full blur-[100px]"></div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-fade-in">
             Get Started in Minutes
           </h2>
-          <p className="text-xl text-muted-foreground mb-12">
+          <p className="text-xl text-muted-foreground mb-12 animate-fade-in-up">
             Install the extension and CLI tool to start catching compatibility issues immediately.
           </p>
           
           <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <Card className="p-8 text-left">
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Code className="h-5 w-5 text-primary" />
+            <Card className="p-8 text-left hover:shadow-glow/20 transition-all duration-300 hover:scale-[1.02] border-border/50 hover:border-primary/30 group">
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 group-hover:text-primary transition-colors">
+                <Code className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
                 Web Demo
               </h3>
               <CodeBlock
@@ -200,16 +203,16 @@ const Index = () => {
                 className="mb-4"
               />
               <Link to="/linter">
-                <Button className="w-full bg-gradient-primary">
+                <Button className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 hover:scale-105">
                   Try Live Demo
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </Card>
             
-            <Card className="p-8 text-left">
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Terminal className="h-5 w-5 text-primary" />
+            <Card className="p-8 text-left hover:shadow-glow/20 transition-all duration-300 hover:scale-[1.02] border-border/50 hover:border-primary/30 group">
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 group-hover:text-primary transition-colors">
+                <Terminal className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
                 VSCode Extension
               </h3>
               <CodeBlock
@@ -220,7 +223,7 @@ code --install-extension baseline-auto-linter`}
                 className="mb-4"
               />
               <Link to="https://github.com/kparth274/web-feature-guard/releases/tag/v0.0.1">
-               <Button className="w-full bg-gradient-primary">
+               <Button className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 hover:scale-105">
                   Try the VSCode Extension
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -233,7 +236,7 @@ code --install-extension baseline-auto-linter`}
               Questions? Visit our Github page for any further queries.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="https://github.com/kparth274/web-feature-guard"><Button variant="outline">
+              <Link to="https://github.com/kparth274/web-feature-guard"><Button variant="outline" className="hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 hover:scale-105">
                 Github
               </Button></Link>
               
