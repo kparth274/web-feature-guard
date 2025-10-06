@@ -1,9 +1,13 @@
+import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { FeatureCard } from "@/components/FeatureCard";
 import { CodeBlock } from "@/components/CodeBlock";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Testimonials } from "@/components/Testimonials";
+import { FAQ } from "@/components/FAQ";
+import { Footer } from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { 
   Terminal, 
@@ -56,10 +60,13 @@ const demoHighlights = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Hero />
+      <Navbar />
+      <div className="pt-16">
+        <Hero />
+      </div>
       
       {/* Demo Section */}
-      <section className="py-20 px-6 relative">
+      <section id="demo" className="py-20 px-6 relative">
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"></div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
@@ -126,7 +133,7 @@ const Index = () => {
       </section>
       
       {/* Features Section */}
-      <section className="py-20 px-6 bg-card/20 relative overflow-hidden">
+      <section id="features" className="py-20 px-6 bg-card/20 relative overflow-hidden">
         <div className="absolute top-1/2 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px]"></div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
@@ -244,6 +251,12 @@ code --install-extension baseline-auto-linter`}
           </div>
         </div>
       </section>
+
+      <Testimonials />
+
+      <FAQ />
+
+      <Footer />
     </div>
   );
 };
